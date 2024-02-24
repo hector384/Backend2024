@@ -127,23 +127,3 @@ class EliminarSitio(graphene.Mutation):
         sitio = Sitio.objects.get(pk=id)
         sitio.delete()
         return EliminarSitio(ok=True)
-
-
-class Mutaciones(graphene.ObjectType):
-    crear_sitio = CrearSitio.Field()
-    actualizar_sitio = ActualizarSitio.Field()
-    eliminar_sitio = EliminarSitio.Field()
-    crear_configuracion_usuario = CrearConfiguracionUsuario.Field()
-    actualizar_configuracion_usuario = ActualizarConfiguracionUsuario.Field()
-    eliminar_configuracion_usuario = EliminarConfiguracionUsuario.Field()
-
-
-class Query(graphene.ObjectType):
-    todos_sitios = graphene.List(SitioType)
-
-    @staticmethod
-    def resolve_todos_sitios(root, info):
-        return Sitio.objects.all()
-
-
-schema = graphene.Schema(query=Query, mutation=Mutaciones)

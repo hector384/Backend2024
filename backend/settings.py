@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y8wrt9fb-mdr%ij#sq5c@ucq$rf*pnn8*fp(@*5@)zrxde+f)p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+GRAPHENE = {"SCHEMA": "backend.schema.schema"}
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
