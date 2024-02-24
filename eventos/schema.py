@@ -1,12 +1,11 @@
 import graphene
 from .models import Evento
-from .types import EventoType
+from .types import EventType
 
 
 class QueryEvents:
-    get_user = graphene.Field(
-        EventoType, username=graphene.String(required=True))
-    all_user = graphene.List(EventoType)
+    get_user = graphene.Field(EventType, username=graphene.String(required=True))
+    all_user = graphene.List(EventType)
 
     def resolve_get_user(root, info, **kwargs):
         try:

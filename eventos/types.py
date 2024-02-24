@@ -1,10 +1,8 @@
-from graphene_django.types import DjangoObjectType
-from .models import Evento, Asistencia
+from graphene_django import DjangoObjectType
+from .models import Evento
 
-class EventoType(DjangoObjectType):
+
+class EventType(DjangoObjectType):
     class Meta:
         model = Evento
-
-class AsistenciaType(DjangoObjectType):
-    class Meta:
-        model = Asistencia
+        fields = "__all__"

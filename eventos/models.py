@@ -18,4 +18,4 @@ class Asistencia(models.Model):
     confirmado = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.usuario.username} - {self.evento.nombre}'
+        return f"{self.usuario.username} - {self.evento.nombre}"

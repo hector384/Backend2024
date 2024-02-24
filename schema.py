@@ -3,10 +3,7 @@ import eventos.schema
 from eventos.mutations import Mutation as EventMutations
 
 
-class Query(
-    eventos.schema.QueryEvents,
-
-        graphene.ObjectType):
+class Query(eventos.schema.QueryEvents, graphene.ObjectType):
     pass
 
 
