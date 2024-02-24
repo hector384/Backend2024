@@ -1,3 +1,5 @@
+from .types import EventType, AsistenciaType
+from .models import Evento, Asistencia
 import graphene
 from .models import Evento
 
@@ -19,14 +21,6 @@ class CreateEvent(graphene.Mutation):
             print("error")
             return CreateEvent(success=False, username=kwargs["username"])
 
-
-class Mutation(graphene.ObjectType):
-    create_event = CreateEvent.Field()
-import graphene
-from .models import Evento, Asistencia
-from .types import EventoType, AsistenciaType
-
-
 class CrearEvento(graphene.Mutation):
     class Arguments:
         nombre = graphene.String(required=True)
@@ -34,7 +28,7 @@ class CrearEvento(graphene.Mutation):
         lugar = graphene.String(required=True)
         descripcion = graphene.String(required=True)
 
-    evento = graphene.Field(EventoType)
+    evento = graphene.Field(EventType)
 
     @staticmethod
     def mutate(root, info, nombre, fecha, lugar, descripcion):
@@ -57,6 +51,7 @@ class ConfirmarAsistencia(graphene.Mutation):
                                 evento_id=evento_id, confirmado=True)
         asistencia.save()
         return ConfirmarAsistencia(asistencia=asistencia)
+
 
 class Mutation(graphene.ObjectType):
     create_event = CrearEvento.Field()
