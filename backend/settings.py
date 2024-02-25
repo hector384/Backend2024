@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "eventos.apps.EventosConfig",
+    "escuelas.apps.EscuelasConfig",
     "graphene_django",
 ]
 
