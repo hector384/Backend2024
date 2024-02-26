@@ -1,12 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from escuelas.models import School
 
 
 class Evento(models.Model):
-    nombre = models.CharField(max_length=100)
-    fecha = models.DateTimeField()
-    lugar = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    id_school = models.ForeignKey(School, on_delete=models.CASCADE)
+    name = models.TextField(max_length=100)
+    date_evenet = models.DateTimeField()
+    place = models.TextField(max_length=100)
+    description = models.TextField()
+    id_picture = models.TextField(max_length=100)
+    route = models.TextField(max_length=100)
+    sizes = models.TextField(max_length=100)
 
     def __str__(self):
         return self.nombre
