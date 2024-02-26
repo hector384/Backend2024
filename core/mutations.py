@@ -1,5 +1,5 @@
+from core.types import ConfiguracionUsuarioType, SitioType
 import graphene
-from graphene_django.types import DjangoObjectType
 from .models import Sitio
 from .models import ConfiguracionUsuario
 
@@ -55,13 +55,19 @@ class EliminarConfiguracionUsuario(graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
 
-    ok = graphene.Boolean()
+    success = graphene.Boolean()
 
     @staticmethod
     def mutate(root, info, id):
+        success = False
         configuracion_usuario = ConfiguracionUsuario.objects.get(pk=id)
-        configuracion_usuario.delete()
-        return EliminarConfiguracionUsuario(ok=True)
+        if configuracion_usuario != None:
+            configuracion_usuario.delete()
+            success = True
+        else:
+            success = False
+
+        return EliminarConfiguracionUsuario(success=success)
 
 
 class CrearSitio(graphene.Mutation):
@@ -117,3 +123,8 @@ class EliminarSitio(graphene.Mutation):
         sitio = Sitio.objects.get(pk=id)
         sitio.delete()
         return EliminarSitio(ok=True)
+
+class Mutation(graphene.ObjectType):
+    create_configuration_user = CrearConfiguracionUsuario.Field()
+    update_configuration_user = ActualizarConfiguracionUsuario.Field()
+    delete_configuration_user = EliminarConfiguracionUsuario.Field()
