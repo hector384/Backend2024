@@ -2,15 +2,15 @@ from django.db import models
 
 
 class School(models.Model):
+    id_user = models.CharField(primary_key=True)
     name = models.TextField(max_length=100)
     created = models.DateTimeField()
     address = models.TextField(max_length=100)
-    id_user = models.CharField()
-    description = models.TextField()
+    description = models.TextField(default="")
     city = models.TextField(max_length=50)
-    mision = models.TextField(max_length=500)
-    vision = models.TextField(max_length=500)
-    policy = models.TextField(max_length=500)
+    mision = models.TextField(max_length=500, default="")
+    vision = models.TextField(max_length=500, default="")
+    policy = models.TextField(max_length=500, default="")
     id_image = models.TextField(max_length=100)
     route = models.TextField(max_length=100)
     sizes = models.TextField(max_length=100)
