@@ -3,6 +3,8 @@ from .models import Evento, Asistencia
 import graphene
 from .models import Evento
 
+from django.contrib.auth.hashers import make_password, check_password
+
 
 class CreateEvent(graphene.Mutation):
     class Arguments:
@@ -13,6 +15,8 @@ class CreateEvent(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **kwargs):
+        
+        
         try:
             events = Evento.objects.values_list().all()
             print(events, "holamundo")
