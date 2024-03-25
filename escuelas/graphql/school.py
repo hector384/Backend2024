@@ -12,5 +12,7 @@ class SchoolGraphql(baseGraphQL):
 
         check.check_name(kwargs["name"])
         validate_email(kwargs["email"])
-        print(kwargs)
-        return [True, "libardo123"]
+        check.check_password(kwargs['password'])
+        check.check_phone("+57", kwargs['telephone'], 10)
+        check.check_username(kwargs['id_user'])
+        return { "success": True, "id_user": kwargs['name']}

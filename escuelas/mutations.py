@@ -12,7 +12,7 @@ class CreateSchool(graphene.Mutation):
         city = graphene.String(required=True)
         password = graphene.String(required=True)
         email = graphene.String(required=True)
-        telephone = graphene.Int(required=True)
+        telephone = graphene.String(required=True)
         is_instructor = graphene.String()
 
     success = graphene.Boolean()
@@ -21,8 +21,7 @@ class CreateSchool(graphene.Mutation):
     @staticmethod
     def mutate(cls, info, **kwargs):
         register = SchoolGraphql(info).RegisterSchool(**kwargs)
-        # return CreateSchool(success=register[0], id_user=register[1])
-        return CreateSchool(success=True, id_user="hola mundo")
+        return CreateSchool(success=register['success'], id_user=register['id_user'])
 
 
 class Mutation(graphene.ObjectType):
