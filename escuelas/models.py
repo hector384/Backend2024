@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 
 
 class School(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_user=models.ForeignKey(User, on_delete=models.CASCADE)
+    id_school = models.TextField(primary_key=True)
     sport = models.CharField(max_length=100, null=False, blank=False)
     name = models.TextField(max_length=100)
     created = models.DateTimeField()

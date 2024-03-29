@@ -4,25 +4,23 @@ from graphene_file_upload.scalars import Upload
 from escuelas.graphql.school import SchoolGraphql
 
 
-class CreateSchool(graphene.Mutation):
+class RegisterUser(graphene.Mutation):
     class Arguments:
-        id_user = graphene.String(required=True)
-        name = graphene.String(required=True)
-        address = graphene.String()
-        city = graphene.String(required=True)
+        username = graphene.String(required=True)
+        first_name = graphene.String(required=True)
+        last_name = graphene.String(required=True)
         password = graphene.String(required=True)
         email = graphene.String(required=True)
-        telephone = graphene.String(required=True)
-        is_instructor = graphene.String()
 
     success = graphene.Boolean()
-    id_user = graphene.String()
+    username = graphene.String()
+    message = graphene.String()
 
     @staticmethod
     def mutate(cls, info, **kwargs):
-        register = SchoolGraphql(info).RegisterSchool(**kwargs)
-        return CreateSchool(success=register['success'], id_user=register['id_user'])
+        register = SchoolGraphql(info).RegisterUser(**kwargs)
+        return RegisterUser(success=register['success'], username=register['username'], message=register['message'])
 
 
 class Mutation(graphene.ObjectType):
-    school_register = CreateSchool.Field()
+    user_register = RegisterUser.Field()
