@@ -11,14 +11,15 @@ class RegisterUser(graphene.Mutation):
         last_name = graphene.String(required=True)
         password = graphene.String(required=True)
         email = graphene.String(required=True)
+        picture = Upload()
 
     success = graphene.Boolean()
     username = graphene.String()
     message = graphene.String()
 
-    @staticmethod
-    def mutate(cls, info, **kwargs):
-        register = SchoolGraphql(info).RegisterUser(**kwargs)
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        register = SchoolGraphql(info).RegisterUser(info, **kwargs)
         return RegisterUser(success=register['success'], username=register['username'], message=register['message'])
 
 

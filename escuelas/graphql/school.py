@@ -6,13 +6,16 @@ from escuelas.models import School
 from datetime import datetime
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
+from util.images import ImageFormat
+# from util.boto3 import conexionBoto
+from util.boto3 import upload_file
 
 class SchoolGraphql(baseGraphQL):
 
     def __init__(self, info):
         super().__init__(info)
 
-    def RegisterUser(self, **kwargs):
+    def RegisterUser(self, info, **kwargs):
 
         check.check_name(kwargs["first_name"])
         check.check_name(kwargs["last_name"])
@@ -20,9 +23,11 @@ class SchoolGraphql(baseGraphQL):
         check.check_password(kwargs['password'])
         check.check_username(kwargs['username'])
         search_user = User.objects.filter(Q(username=kwargs['username']) ^ Q(email=kwargs['email']))
-        for user in search_user:
-            print(user.username, user.email)
-            
+        if kwargs.get('picture') is not None:
+            print(kwargs['picture'])
+            ImageFormat(kwargs['picture'], 1)
+            upload_file(kwargs['picture'][0], kwargs['username'])
+
         #validar que no exista un usuario con ese mismo id
         if len(search_user) == 0:
             print('ok', search_user)
@@ -35,7 +40,7 @@ class SchoolGraphql(baseGraphQL):
             new_user.is_staff = False
             new_user.is_superuser = False
             new_user.is_active = False
-            new_user.save()
+            # new_user.save()
             return { "success": True, "message": "", "username": kwargs['username']}
         else:
             print('ya existe!')
