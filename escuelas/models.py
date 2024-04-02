@@ -1,8 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class School(models.Model):
-    id_user = models.CharField(primary_key=True)
+    id_user=models.ForeignKey(User, on_delete=models.CASCADE)
+    id_school = models.TextField(primary_key=True)
+    sport = models.CharField(max_length=100, null=False, blank=False)
     name = models.TextField(max_length=100)
     created = models.DateTimeField()
     address = models.TextField(max_length=100)
@@ -15,7 +18,6 @@ class School(models.Model):
     route = models.TextField(max_length=100)
     sizes = models.TextField(max_length=100)
     banner = models.TextField(max_length=100)
-    password = models.TextField(max_length=20)
     email = models.EmailField(max_length=100)
     telephone = models.TextField(max_length=100)
     is_instructor = models.BooleanField(default=False)
