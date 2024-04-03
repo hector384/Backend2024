@@ -10,7 +10,7 @@ BUCKET = {
     "name": "yns-profile",
     "region": "us-east-2",
     "domain": "amazonaws.com",
-    "sizes": [[100, 100], [400, 400], [720, 720]]
+    "sizes": [[720, 720], [400, 400], [100, 100]]
 }
 
 def upload_file(img, username):
@@ -29,19 +29,20 @@ def upload_file(img, username):
         endpoint_url = 'https://{}.{}.{}.{}/'.format(BUCKET["name"], BUCKET["service"], BUCKET["region"], BUCKET["domain"]), 
     )
     try:
-        img = Image.open(img)
-        for size in BUCKET['sizes']:
+        img_open = Image.open(img)
+        for item in BUCKET['sizes']:
             buffer = io.BytesIO()
-            img.thumbnail((size[0],size[1]))
-            img.save('/Users/libardovega/{}{}.{}'.format(file_name,size[0],format), format, quality=60)
+            size = item[0], item[1]
+            img_open.thumbnail(size)
+            img_open.save(buffer, format, quality=60)
             buffer.seek(0) # rewind pointer back to start
-            """ s3_client.put_object(
+            s3_client.put_object(
                 ACL = 'public-read',
                 Body = buffer,
-                Bucket = '{}x{}'.format(size[0], size[1]),
+                Bucket = '{}x{}'.format(item[0], item[1]),
                 Key = '{}.{}'.format(file_name, format),
-                ContentType = 'media-type',
-            ) """
+                ContentType = 'image/jpeg',
+            )
             buffer.close()
             del buffer
         img.close()
