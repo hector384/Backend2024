@@ -47,6 +47,19 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "graphene_django",
 ]
+# settings.py
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        # Cambia localhost y el puerto según tu configuración de Redis
+        'LOCATION': 'redis://localhost:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
