@@ -1,76 +1,47 @@
 from backend.graphqlbase import baseGraphQL
-from django.contrib.auth.models import User
 from util.check import check
 from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from escuelas.models import School
-
+from datetime import datetime
+from django.contrib.auth.hashers import make_password
+from django.db.models import Q
+from util.images import ImageFormat
+# from util.boto3 import conexionBoto
+from util.boto3 import upload_file
 
 class SchoolGraphql(baseGraphQL):
 
     def __init__(self, info):
         super().__init__(info)
 
-    def RegisterSchool(self, **kwargs):
-        """logica para crear una escuela"""
-        user = User()
-        user.email = kwargs('email')
-        print(user.__dict__())
-        return [True, "libardo123"]
+    def RegisterUser(self, info, **kwargs):
 
-    def GetSchools(self, **kwargs):
-        if kwargs.get('city') != None:
-            search = School.objects.filter(city__contains=kwargs['city'])
-            if search != None:
-                print(search)
-                print(len(search))
-            else:
-                print("No School")
-            """logica para responder..."""
-            print('hola query')
-            return {
-                "school": str(len(search)),
-                "route": 'hola route',
-                "id_picture": 'hola id_picture',
-                "sizes": 'hola sizes',
-                "email": 'hola email',
-            }
+        check.check_name(kwargs["first_name"])
+        check.check_name(kwargs["last_name"])
+        validate_email(kwargs["email"])
+        check.check_password(kwargs['password'])
+        check.check_username(kwargs['username'])
+        search_user = User.objects.filter(Q(username=kwargs['username']) ^ Q(email=kwargs['email']))
+        if kwargs.get('picture') is not None:
+            print(kwargs['picture'])
+            ImageFormat(kwargs['picture'], 1)
+            upload_file(kwargs['picture'][0], kwargs['username'])
 
-    def ValidateEmail(self, value):
-        if User.objects.filter(email=value).exists():
-            return {"success": False, "message": 'Correo ya usado'}
+        #validar que no exista un usuario con ese mismo id
+        if len(search_user) == 0:
+            print('ok', search_user)
+            new_user = User()
+            new_user.username = kwargs['username']
+            new_user.email = kwargs['email']
+            new_user.password = make_password(kwargs['password'])
+            new_user.date_joined = datetime.now()
+            new_user.first_name = kwargs['first_name']
+            new_user.is_staff = False
+            new_user.is_superuser = False
+            new_user.is_active = False
+            # new_user.save()
+            return { "success": True, "message": "", "username": kwargs['username']}
         else:
-            return {"success": True, "message": 'Correo disponible'}
-
-    def ValidateUserEmail(self, **kwargs):
-        success = True
-        message = ""
-        if kwargs['cod'] == 1:
-            # hay que validar usuario
-            # result = SchoolGraphql(info).ValidateEmail(value=value)
-            p = check.check_name(kwargs["data"])
-            print(p)
-
-            if p['success'] == True:
-                if check.check_validateuser(kwargs["data"]):
-                    success = False
-                    message = "user  already used"
-                # Extrae los valores de "success" y "message" de la respuesta
-            else:
-                success = p['success']
-                message = p['message']
-
-        elif kwargs['cod'] == 2:
-            try:
-                if validate_email(kwargs['data']):
-                    if check.check_validate_email(kwargs['data']):
-                        success = False
-                        message = "email already used"
-            except ValidationError:
-                success = False
-                message = "invalid email"
-        else:
-            success = False
-            message = "invalid code"
-
-        return {"success": success, "message": message}
+            print('ya existe!')
+            return { "success": False, "message": "Usuario/Email ya existe!", "username": kwargs['username']}
